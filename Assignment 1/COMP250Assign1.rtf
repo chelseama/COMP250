@@ -1,0 +1,148 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf510
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww28600\viewh14880\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs24 \cf0 COMP 250: ASSIGNMENT 1\
+\
+1. \
+Algorithm: search(a,n,val)\
+Input: array a of n elements and value val that we want to find\
+Output: true if a contains val, false otherwise\
+int i; // this is an index in the array\
+i <-- 0 //index is 0\
+while(i<n) do //when index is smaller than the size of array a\
+   if a[i] = val then //if value of the array equals value that we are looking for\
+      return true; \
+   i <-- i + 1 //increment index by 1\
+return false; \
+\
+Algorithm: List Intersection(a,n,b,m)\
+Input: array a of size n and array b of size m\
+Output: number of unique elements in the intersection\
+int intersect <-- 0\
+for i <-- 0 to n-1 do //index from 0 to n-1\
+   if search(b,m,a[i]) then\
+      intersect <-- intersect +1; //if intersection is found, increment by 1\
+      x=a[i]; //set the intersecting value to x\
+   endif\
+endfor\
+//to eliminate duplicates\
+//create a new array k with the size intersect to check if there's a duplicate\
+int k[];\
+for j <-- 0 to intersect -1;  //index of array k from intersect-1\
+   if search(k,intersect,x) //search if array k is the same as value x\
+      intersect--;   \
+   endif\
+endfor\
+\
+return intersect;\
+\
+\
+\
+\
+\
+2.\
+Algorithm: compare(a,i,j,k,l)\
+Input: array a of size n, indices i and j which delimit the part of interest, indices k and l which delimit the other part of interest\
+Output: 1 if a[i\'85j] is greater than a[k\'85l], -1 if a[i\'85j] is smaller than a[k\'85l], 0 if a[i\'85j] is equal to a[k\'85l]\
+   if a[i\'85j] > a[k\'85l] then //if the first half is greater than the other half\
+      return 1;\
+   else if a[i\'85j] < a[k\'85l] then //if the first half is less than the other half\
+      return -1;\
+   else \
+      return 0;\
+\
+Algorithm: findLeadCoin(a,val)\
+Input: array a of size n\
+Output: val which is the index of the lead coin \
+int val; \
+\
+//when the array has odd number of size\
+if (n%2==1)   //if array size n divided by 2 gives remainder of 1, meaning the array size is an odd number\
+   oddRes=compare(a,0,(n-1)/2,(n-1)/2+1,n-2) //leave the element at the last index and compare\
+   if oddRes==0 //if the first half and the other half have the equal weight\
+      then return val = a[n-1];  break; //index of the lead coin is the last index of the array\
+   else if oddRes==1 //if the first half is heavier\
+      then a[(n-1)/2+1\'85n-2].clear();  //remove the second half of the array a[k\'85l]\
+   else //when oddRes=-1 //if the second half is heavier\
+      then a[0\'85(n-1)/2].clear();  //remove the first half of the array a[i\'85j]   \
+\
+\
+//when the array has even number of size\
+else //(n%2==0)  division by 2 gives 0 meaning the array size n is an even number\
+   evenRes=compare(a,0,n/2,n/2+1,n-1)    //compare the first half and the second half\
+   if (i==k) //if the first index of the first half and the first index of the second half are equal\
+      then return i; break; //means that there is only one element left and it is the lead coin\
+   else if evenRes==1  //if the first half is heavier\
+      then a[n/2+1\'85n-1].clear();  //remove the second half of the array a[k\'85l]\
+   else //when evenRes==-1   //if the second half is heavier\
+      then a[0\'85n/2].clear();  //remove the first half of the array a[i\'85j]\
+\
+return findLeadCoin(a,val);\
+\
+\
+\
+\
+3.\
+a) See the attached java file.\
+b) The time complexity of my algorithm is (O(n^2)) because getCount method has two for loops. Since big oh notation allows us to ignore constant factors and lower order terms and focus on main components of function that affect its growth, I only consider two for loops into account and conclude that the time complexity is (O(n^2)).\
+\
+\
+\
+4. \
+a) \
+public Poly multiply(Poly p) throws Exception\{\
+ if(p==null)\
+  throw new Exception("p is null");\
+ int n=getDegree();\
+ int m=p.getDegree();\
+ Poly result=new Poly(n+m);\
+ try\{\
+ for(int i=0;i<=n;i++)\{\
+  for(int j=0;j<=m;j++)\{\
+   result.coefficients[i+j]+=coefficients[i]*p.coefficients[j]; \
+  \}\
+ \}\}\
+ \
+ catch(Exception e)\{\
+ \}\
+ return result;\
+ \}\
+ \
+ \
+\pard\pardeftab720
+\cf0 b) \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0  public Poly multiplyConstant(double m)\{\
+  Poly constant=new Poly(0);\
+  constant.coefficients[0]=m;\
+  Poly result=null;\
+  try\{\
+  result=multiply(constant);  \
+  \}\
+  catch (Exception e)\{\
+  \}\
+ return result;\
+ \}\
+ \
+c)\
+public void resize()\{\
+  for(int i=coefficients.length-1;i>=0&&coefficients[i]==0;i--)\{\
+   double[]newCoeff=new double[i];\
+   for(i=0;i<newCoeff.length;i++)\{\
+    newCoeff[i]=coefficients[i];\
+   \}\
+   coefficients=newCoeff;\
+  \}\
+ \}\
+d) \
+\pard\pardeftab720
+\cf0  public Poly derivative()\{\
+  Poly der=new Poly(getDegree()-1);\
+  for(int i=1;i<coefficients.length;i++)\{\
+   der.coefficients[i-1]=coefficients[i]*i;\
+  \}\
+  return der;\
+ \}}
